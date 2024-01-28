@@ -99,6 +99,23 @@ function CurrentTime() {
   return <span suppressHydrationWarning>{currentTime}</span>;
 }
 
+function checkOffSet() {
+  let positionY;
+  let STORAGE_KEY = 'scrollY';
+  positionY = window.scrollY;
+  localStorage.setItem(STORAGE_KEY, positionY);
+
+  window.addEventListener('load', function () {
+    positionY = localStorage.getItem(STORAGE_KEY);
+
+    if (positionY !== null) {
+      scrollTo(0, positionY);
+    }
+
+    window.addEventListener('scroll', checkOffSet, false);
+  });
+}
+
 const blogSidebar = sidebarBlog.routes[1];
 if (blogSidebar.path !== '/blog') {
   throw Error('Could not find the blog route in sidebarBlog.json');

@@ -11,6 +11,14 @@ import '../styles/algolia.css';
 import '../styles/index.css';
 import '../styles/sandpack.css';
 
+let positionY;
+let STORAGE_KEY = 'scrollY';
+
+function checkOffSet() {
+  positionY = window.scrollY;
+  localStorage.setItem(STORAGE_KEY, String(positionY));
+}
+
 if (typeof window !== 'undefined') {
   const terminationEvent = 'onpagehide' in window ? 'pagehide' : 'unload';
   window.addEventListener(terminationEvent, function () {
@@ -19,6 +27,16 @@ if (typeof window !== 'undefined') {
       event_label: 'JS Dependencies',
       event: 'unload',
     });
+  });
+
+  window.addEventListener('pageshow', function () {
+    positionY = localStorage.getItem(STORAGE_KEY);
+
+    if (positionY !== null) {
+      scrollTo(0, parseInt(positionY));
+    }
+
+    window.addEventListener('scroll', checkOffSet, false);
   });
 }
 
